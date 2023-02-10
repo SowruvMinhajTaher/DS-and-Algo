@@ -1,0 +1,55 @@
+import heapq
+class Graph():
+    def __init__(self, vertices):
+        self.v = vertices
+        self.adj = [[] for _ in range (v)] #initializing the adjacent list
+        print(self.adj)
+        
+    def addEdge(self, u, v, w):
+        self.adj[u].append((v, w))
+        self.adj[v].append((u, w))
+        
+    def shortestPath(self, src:int):
+        pq = [] # to store vertices are being processed
+        #now we have to push the first vertex to the heap
+        heapq.heappush(pq, (0, src)) #(dist, vertex) first vertex distance is 0 
+        dist = [float("inf")] * self.v 
+        dist[src] = 0 #src to src
+        
+        while pq: #(dist, vertex)
+            d, u = heapq.heappop(pq)
+            
+            for v, weight in self.adj[u]: # exploring all adjacency vertices of
+                if dist[v] > dist[u]+weight: #initially it was set to float("inf")
+                    dist[v] = dist[u] + weight
+                    heapq.heappush(pq, (dist[v], v)) #updating the heap 
+                    
+        # finally printing the shortestPath
+        for i in range(self.v):
+            print(f"{i}\t {dist[i]}")
+            
+        
+    def print(self): #just to see the state of adjacency list
+        print(self.adj)
+
+
+if __name__ == "__main__":
+    v= 9 # vertices
+    g = Graph(v)
+    
+    g.addEdge(0, 2, 4)
+    g.addEdge(0, 7, 8)
+    g.addEdge(1, 2, 8)
+    g.addEdge(1, 7, 11)
+    g.addEdge(2, 3, 7)
+    g.addEdge(2, 8, 2)
+    g.addEdge(2, 5, 4)
+    g.addEdge(3, 4, 9)
+    g.addEdge(3, 5, 14)
+    g.addEdge(4, 5, 10)
+    g.addEdge(5, 6, 2)
+    g.addEdge(6, 7, 1)
+    g.addEdge(6, 8, 6)
+    g.addEdge(7, 8, 7)
+    #g.print()
+    g.shortestPath(0)
